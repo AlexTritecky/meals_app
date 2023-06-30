@@ -1,19 +1,41 @@
 import 'package:client/models/meal.dart';
+import 'package:client/screens/meal_details.dart';
 import 'package:client/widgets/meal_item.dart';
 import 'package:flutter/material.dart';
 
 class MealsScreen extends StatelessWidget {
-  const MealsScreen({super.key, required this.title, required this.meals});
+  const MealsScreen(
+      {super.key,
+      required this.meals,
+      this.title,
+      required this.onToggleFavorite});
 
-  final String title;
+  final String? title;
   final List<Meal> meals;
+
+  final void Function(Meal meal) onToggleFavorite;
+
+  void selectMeal(BuildContext context, Meal meal) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => MealDetailsScreen(
+          meal: meal,
+          onToggleFavorite: onToggleFavorite,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     Widget content = ListView.builder(
       itemCount: meals.length,
       itemBuilder: (context, index) {
-        return MealItem(meal: meals[index]);
+        return MealItem(
+            meal: meals[index],
+            onSelectMeal: (context, meal) {
+              selectMeal(context, meal);
+            });
       },
     );
 
@@ -23,7 +45,7 @@ class MealsScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text('No meals found',
-              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+              style: Theme.of(context).textTheme.titleLarge!.copyWith(
                     color: Theme.of(context).colorScheme.onBackground,
                   )),
           const SizedBox(height: 16),
@@ -31,19 +53,17 @@ class MealsScreen extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                     color: Theme.of(context).colorScheme.onBackground,
                   )),
-          const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text('Go back'),
-          ),
         ],
       ));
     }
+
+    if (title == null) {
+      return content;
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        title: Text(title!),
       ),
       body: content,
     );
