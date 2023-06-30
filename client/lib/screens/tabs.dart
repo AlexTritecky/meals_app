@@ -1,6 +1,8 @@
 import 'package:client/models/meal.dart';
 import 'package:client/screens/categories.dart';
+import 'package:client/screens/filters.dart';
 import 'package:client/screens/meals.dart';
+import 'package:client/widgets/main_drawer.dart';
 import 'package:flutter/material.dart';
 
 class TabsScreen extends StatefulWidget {
@@ -15,7 +17,7 @@ class _TabsScreenState extends State<TabsScreen> {
 
   final List<Meal> _favoriteMeals = [];
 
-  void _showInfoMessage (String message) {
+  void _showInfoMessage(String message) {
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -43,6 +45,24 @@ class _TabsScreenState extends State<TabsScreen> {
     });
   }
 
+  void _setScreen(String identifier) {
+    Navigator.of(context).pop();
+    switch (identifier) {
+      case 'meals':
+        _selectPage(0);
+        return;
+      case 'filters':
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (ctx) => const FilterScreen(),
+          ),
+        );
+        return;
+      default:
+        _selectPage(0);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget activePage = CategoriesScreen(
@@ -61,6 +81,9 @@ class _TabsScreenState extends State<TabsScreen> {
     return Scaffold(
         appBar: AppBar(
           title: Text(activePageTitle),
+        ),
+        drawer: MainDrawer(
+          onSelectScreen: _setScreen,
         ),
         body: activePage,
         bottomNavigationBar: BottomNavigationBar(
