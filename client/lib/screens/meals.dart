@@ -4,14 +4,14 @@ import 'package:client/widgets/meal_item.dart';
 import 'package:flutter/material.dart';
 
 class MealsScreen extends StatelessWidget {
-  const MealsScreen(
-      {super.key,
-      required this.meals,
-      this.title,});
+  const MealsScreen({
+    super.key,
+    required this.meals,
+    this.title,
+  });
 
   final String? title;
   final List<Meal> meals;
-
 
   void selectMeal(BuildContext context, Meal meal) {
     Navigator.of(context).push(

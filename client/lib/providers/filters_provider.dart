@@ -1,6 +1,4 @@
-import 'package:client/data/dummy_data.dart';
 import 'package:client/providers/meals_provider.dart';
-import 'package:client/screens/tabs.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 enum Filter {
@@ -18,21 +16,17 @@ const kInitialFilters = {
 };
 
 class FiltersNotifier extends StateNotifier<Map<Filter, bool>> {
-  FiltersNotifier(super._state) : _filters = kInitialFilters;
-
-  Map<Filter, bool> _filters;
-
-  Map<Filter, bool> get filters => _filters;
+  FiltersNotifier(Map<Filter, bool> state) : super(kInitialFilters);
 
   void setFilter(Filter filter, bool value) {
-    _filters = {
-      ..._filters,
+    state = {
+      ...state,
       filter: value,
     };
   }
 
   void setFilters(Map<Filter, bool> filters) {
-    _filters = filters;
+    state = filters;
   }
 }
 
